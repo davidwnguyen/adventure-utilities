@@ -10,10 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -32,15 +29,12 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
-
-import java.util.Random;
 
 import static net.minecraft.world.item.Tiers.NETHERITE;
 
@@ -72,21 +66,7 @@ public class AdventureUtilities
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
     public static final DeferredItem<Item> EXAMPLE_SWORD = ITEMS.register("example_sword", () -> new SwordItem(
-            // The tier to use.
-            NETHERITE,
-            // The item properties. We don't need to set the durability here because TieredItem handles that for us.
-            new Item.Properties().attributes(
-                    // There are `createAttributes` methods in either the class or subclass of each DiggerItem
-                    SwordItem.createAttributes(
-                            // The tier to use.
-                            NETHERITE,
-                            // The type-specific attack damage bonus. 3 for swords, 1.5 for shovels, 1 for pickaxes, varying for axes and hoes.
-                            3,
-                            // The type-specific attack speed modifier. The player has a default attack speed of 4, so to get to the desired
-                            // value of 1.6f, we use -2.4f. -2.4f for swords, -3f for shovels, -2.8f for pickaxes, varying for axes and hoes.
-                            -2.0f
-                            )
-            )
+            NETHERITE, new Item.Properties().attributes(SwordItem.createAttributes(NETHERITE,3,-2.0f))
     ));
 
     public static final Holder<Attribute> THROWABLE_ADD_DAMAGE_BONUS = ATTRIBUTES.register("throwable_add_damage_bonus", () -> new RangedAttribute(MODID+".throwable_add_damage_bonus", 0.0D, 0.0D, 1024.0D).setSyncable(true));
@@ -110,7 +90,6 @@ public class AdventureUtilities
         // Register the commonSetup method for modloading
         modEventBus.addListener(AdventureUtilities::commonSetup);
         modEventBus.addListener(AdventureUtilities::onAttributeModification);
-        NeoForge.EVENT_BUS.addListener(AdventureUtilities::onUseItem);
         NeoForge.EVENT_BUS.addListener(OnLivingIncomingDamageEvent::onIncomingDamage);
         NeoForge.EVENT_BUS.addListener(OnEntityInvulnerabilityCheckEvent::onInvulnCheck);
 
@@ -139,29 +118,6 @@ public class AdventureUtilities
         event.add(EntityType.PLAYER, THROWABLE_CONSUME_CHANCE, 0);
         event.add(EntityType.PLAYER, THROWABLE_ADD_DAMAGE_BONUS, 0);
         event.add(EntityType.PLAYER, THROWABLE_MULT_DAMAGE_BONUS, 1);
-    }
-
-    private static void onUseItem(ProjectileImpactEvent event) {
-        if(!(event.getProjectile() instanceof ThrowableItemProjectile proj))
-            return;
-
-        if(!(proj.getOwner() instanceof Player owner))
-            return;
-
-        if(owner.level().isClientSide() || owner.isCreative())
-            return;
-
-        ItemStack item = proj.getItem();
-
-        AttributeInstance temp = owner.getAttribute(THROWABLE_CONSUME_CHANCE);
-        if(temp == null)
-            return;
-
-        if(temp.getValue() >= new Random().nextDouble()) {
-            ItemStack recycle = item.copy();
-            recycle.setCount(1);
-            owner.getInventory().add(recycle);
-        }
     }
 
     private static void commonSetup(final FMLCommonSetupEvent event)
