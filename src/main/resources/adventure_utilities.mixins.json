@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "package": "com.telia.adventure_utilities.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+    ],
+    "client": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
