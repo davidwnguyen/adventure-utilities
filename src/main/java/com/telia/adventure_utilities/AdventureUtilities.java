@@ -1,7 +1,6 @@
 package com.telia.adventure_utilities;
 
 import com.mojang.logging.LogUtils;
-import com.telia.adventure_utilities.events.OnEntityInvulnerabilityCheckEvent;
 import com.telia.adventure_utilities.events.OnLivingIncomingDamageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
@@ -91,7 +90,6 @@ public class AdventureUtilities
         modEventBus.addListener(AdventureUtilities::commonSetup);
         modEventBus.addListener(AdventureUtilities::onAttributeModification);
         NeoForge.EVENT_BUS.addListener(OnLivingIncomingDamageEvent::onIncomingDamage);
-        NeoForge.EVENT_BUS.addListener(OnEntityInvulnerabilityCheckEvent::onInvulnCheck);
 
         ATTRIBUTES.register(modEventBus);
         // Register the Deferred Register to the mod event bus so blocks get registered

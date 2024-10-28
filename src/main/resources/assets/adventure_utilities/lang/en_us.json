@@ -3,6 +3,8 @@
     "item.adventure_utilities.example_sword": "Example Sword Name",
     "block.adventure_utilities.example_block": "Example Block Name",
     "itemGroup.adventure_utilities": "Adventure Utilities",
+    "key.adventure_utilities.open_skill_tree": "Open Skill Tree",
+    "key.categories.adventure_utilities": "Adventure Utilities",
     "attribute.name.adventure_utilities.throwable_add_damage_bonus": "Throwable Damage",
     "attribute.name.adventure_utilities.throwable_mult_damage_bonus": "Throwable Damage",
     "attribute.name.adventure_utilities.throwable_consume_chance": "Throwable Recycle Chance"
