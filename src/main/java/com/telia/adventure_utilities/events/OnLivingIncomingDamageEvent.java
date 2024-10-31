@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.HashMap;
@@ -14,8 +15,8 @@ import static com.telia.adventure_utilities.AdventureUtilities.THROWABLE_ADD_DAM
 import static com.telia.adventure_utilities.AdventureUtilities.THROWABLE_MULT_DAMAGE_BONUS;
 
 public class OnLivingIncomingDamageEvent {
-    private static final HashMap<Entity, HashMap<Entity, Long>> HurtMap = new HashMap<>();
-    private static final HashMap<Entity, Long> EnvironmentalHurtMap = new HashMap<>();
+    public static final HashMap<Entity, HashMap<Entity, Long>> HurtMap = new HashMap<>();
+    public static final HashMap<Entity, Long> EnvironmentalHurtMap = new HashMap<>();
 
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         if(event.getEntity().level().isClientSide())

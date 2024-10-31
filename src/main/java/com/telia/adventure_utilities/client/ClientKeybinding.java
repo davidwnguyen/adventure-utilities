@@ -35,7 +35,7 @@ public class ClientKeybinding {
         event.register(SKILL_TREE_MAPPING.get());
     }
     
-    public void onClientTick(ClientTickEvent.Post event) {
+    public static void onClientTick(ClientTickEvent.Post event) {
         while (SKILL_TREE_MAPPING.get().consumeClick()) {
             AdventureUtilities.LOGGER.info("yuh?");
         }

@@ -1,6 +1,8 @@
 package com.telia.adventure_utilities;
 
 import com.mojang.logging.LogUtils;
+import com.telia.adventure_utilities.client.ClientKeybinding;
+import com.telia.adventure_utilities.events.OnEntityLeaveLevelEvent;
 import com.telia.adventure_utilities.events.OnLivingIncomingDamageEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
@@ -25,6 +27,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
@@ -90,6 +93,11 @@ public class AdventureUtilities
         modEventBus.addListener(AdventureUtilities::commonSetup);
         modEventBus.addListener(AdventureUtilities::onAttributeModification);
         NeoForge.EVENT_BUS.addListener(OnLivingIncomingDamageEvent::onIncomingDamage);
+        NeoForge.EVENT_BUS.addListener(OnEntityLeaveLevelEvent::onEntityRemoved);
+
+        if(FMLEnvironment.dist.isClient()) {
+            NeoForge.EVENT_BUS.addListener(ClientKeybinding::onClientTick);
+        }
 
         ATTRIBUTES.register(modEventBus);
         // Register the Deferred Register to the mod event bus so blocks get registered
